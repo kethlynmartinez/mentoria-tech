@@ -24,7 +24,7 @@ const interviewFeedback = "Simulação concluída! Pontos fortes: clareza ao con
 
 function CareerChat(){
   const [open,setOpen]=useState(false);
-  const [messages,setMessages]=useState<{from:"user"|"ai";text:string;actions?:ChatAction[]}[]>([]);
+  const [messages,setMessages]=useState<{from:"user"|"ai";text:string;actions?:ChatAction[]|undefined}[]>([]);
   const [typing,setTyping]=useState(false);
   const [attached,setAttached]=useState<string|null>(null);
   const [step,setStep]=useState(0);
@@ -32,14 +32,14 @@ function CareerChat(){
   const fileInput=useRef<HTMLInputElement>(null);
   const suggestions=["Analisar currículo","Analisar portfólio","Simular entrevista","Preparar para liderança","Encontrar uma mentora"];
 
-  const aiSay=(text:string,actions?:ChatAction[])=>{setTyping(true);setTimeout(()=>{setMessages(m=>[...m,{from:"ai",text,actions}]);setTyping(false)},800)};
+  const aiSay=(text:string,actions?:ChatAction[]|undefined)=>{setTyping(true);setTimeout(()=>{setMessages(m=>[...m,{from:"ai",text,actions}]);setTyping(false)},800)};
   const send=(value:string)=>{
     if(!value)return;
     setMessages(m=>[...m,{from:"user",text:value}]);
     const v=value.toLowerCase();
     if(v.includes("currículo")||v.includes("curriculo"))aiSay("Análise do seu currículo: o resumo está genérico e faltam resultados com números. Priorize conquistas mensuráveis, limite a 2 páginas e alinhe as palavras-chave à vaga desejada.",[{label:"Ver dicas completas",kind:"tips"},{label:"Agendar mentoria de currículo",kind:"schedule",topic:"Mentoria de currículo"}]);
     else if(v.includes("portfólio")||v.includes("portfolio"))aiSay("Análise do seu portfólio: os projetos estão bem apresentados, mas a narrativa pode melhorar. Explique o problema, sua decisão técnica e o impacto final em cada case.",[{label:"Agendar revisão de portfólio",kind:"schedule",topic:"Revisão de portfólio"}]);
-    else if(v.includes("entrevista")){stepRef.current=0;setStep(0);aiSay(interviewQuestions[0],[{label:"Próxima pergunta",kind:"next"}])}
+    else if(v.includes("entrevista")){stepRef.current=0;setStep(0);aiSay(interviewQuestions[0]!,[{label:"Próxima pergunta",kind:"next"}])}
     else if(v.includes("liderança")||v.includes("lideranca"))aiSay("Vamos mapear comunicação, influência e gestão de conflitos para seu próximo passo. Um bom exercício: escolha uma situação recente em que você precisou alinhar pessoas com opiniões diferentes.",[{label:"Agendar mentoria de liderança",kind:"schedule",topic:"Preparação para liderança"}]);
     else aiSay("Vou cruzar seu objetivo, experiência e área para sugerir perfis compatíveis.",[{label:"Responder ao questionário",kind:"link"}]);
   };
@@ -59,7 +59,7 @@ function CareerChat(){
   };
   const analyzeFile=()=>{
     if(!attached)return;
-    const name=attached;
+    const name=attached as string;
     setAttached(null);
     setMessages(m=>[...m,{from:"user",text:`Anexei o arquivo: ${name}`}]);
     aiSay(`Recebi ${name}. Análise inicial: o documento está organizado, mas o resumo pode ser mais direto e faltam resultados com números. Preparei 6 ajustes prioritários para elevar o impacto.`,[{label:"Ver dicas completas",kind:"tips"},{label:"Agendar mentoria de currículo",kind:"schedule",topic:"Mentoria de currículo"}]);
@@ -67,7 +67,7 @@ function CareerChat(){
 
   const renderAction=(a:ChatAction,key:number)=>{
     if(a.kind==="tips")return <TipsDialog key={key}><button className={pillClass}>{a.label}</button></TipsDialog>;
-    if(a.kind==="schedule")return <ScheduleDialog key={key} topic={a.topic}><button className={pillClass}>{a.label}</button></ScheduleDialog>;
+    if(a.kind==="schedule")return <ScheduleDialog key={key} {...(a.topic?{topic:a.topic}:{})}><button className={pillClass}>{a.label}</button></ScheduleDialog>;
     if(a.kind==="link")return <Link key={key} to="/questionario" className={pillClass}>{a.label}</Link>;
     return <button key={key} className={pillClass} onClick={()=>onAction(a)}>{a.label}</button>;
   };

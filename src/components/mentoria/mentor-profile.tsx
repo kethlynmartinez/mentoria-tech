@@ -77,7 +77,7 @@ export function MentorProfile({ mentor: m }: { mentor: Mentor }) {
         </section>
         <section className="pb-24">
           <SectionTitle eyebrow="Avaliações" title={`O que dizem as mentorandas de ${first}`} />
-          <div className="grid gap-6 md:grid-cols-3">{m.testimonials.map((t, i) => <TestimonialCard key={t.name} {...t} tone={tones[i % 3]} />)}</div>
+          <div className="grid gap-6 md:grid-cols-3">{m.testimonials.map((t, i) => <TestimonialCard key={t.name} {...t} tone={tones[i % 3] ?? "primary"} />)}</div>
         </section>
       </div>
     </div>
