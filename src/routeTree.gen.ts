@@ -11,8 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AssinaturaRouteImport } from './routes/assinatura'
-import { Route as MentoraRouteImport } from './routes/mentora'
 import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as MentoraIndexRouteImport } from './routes/mentora.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,49 +24,49 @@ const AssinaturaRoute = AssinaturaRouteImport.update({
   path: '/assinatura',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MentoraRoute = MentoraRouteImport.update({
-  id: '/mentora',
-  path: '/mentora',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PerfilRoute = PerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentoraIndexRoute = MentoraIndexRouteImport.update({
+  id: '/mentora/',
+  path: '/mentora/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
-  '/mentora': typeof MentoraRoute
   '/perfil': typeof PerfilRoute
+  '/mentora/': typeof MentoraIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
-  '/mentora': typeof MentoraRoute
   '/perfil': typeof PerfilRoute
+  '/mentora': typeof MentoraIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
-  '/mentora': typeof MentoraRoute
   '/perfil': typeof PerfilRoute
+  '/mentora/': typeof MentoraIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/assinatura' | '/mentora' | '/perfil'
+  fullPaths: '/' | '/assinatura' | '/perfil' | '/mentora/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assinatura' | '/mentora' | '/perfil'
-  id: '__root__' | '/' | '/assinatura' | '/mentora' | '/perfil'
+  to: '/' | '/assinatura' | '/perfil' | '/mentora'
+  id: '__root__' | '/' | '/assinatura' | '/perfil' | '/mentora/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssinaturaRoute: typeof AssinaturaRoute
-  MentoraRoute: typeof MentoraRoute
   PerfilRoute: typeof PerfilRoute
+  MentoraIndexRoute: typeof MentoraIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,18 +85,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssinaturaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mentora': {
-      id: '/mentora'
-      path: '/mentora'
-      fullPath: '/mentora'
-      preLoaderRoute: typeof MentoraRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/perfil': {
       id: '/perfil'
       path: '/perfil'
       fullPath: '/perfil'
       preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentora/': {
+      id: '/mentora/'
+      path: '/mentora'
+      fullPath: '/mentora/'
+      preLoaderRoute: typeof MentoraIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -105,8 +105,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssinaturaRoute: AssinaturaRoute,
-  MentoraRoute: MentoraRoute,
   PerfilRoute: PerfilRoute,
+  MentoraIndexRoute: MentoraIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
