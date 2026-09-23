@@ -38,7 +38,7 @@ function PendingAttachments() {
 
 function AttachmentButton() {
   const attachments = usePromptInputAttachments();
-  return <PromptInputButton type="button" variant="outline" size="icon" aria-label="Anexar arquivo" onClick={attachments.openFileDialog}><Paperclip /></PromptInputButton>;
+  return <PromptInputButton type="button" variant="outline" size="icon-sm" aria-label="Anexar arquivo" onClick={attachments.openFileDialog}><Paperclip /></PromptInputButton>;
 }
 
 function CareerChat() {
