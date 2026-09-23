@@ -48,7 +48,7 @@ export function ScheduleDialog({ children, mentor = "Mariana Costa", topic = "Me
 }
 
 export function PackageDialog({ children, id, price }: TriggerProps & { id: keyof typeof packages | string; price?: string }) {
-  const pkg = packages[id] ?? packages.carreira!;
+  const pkg = packages[id] ?? packages["carreira"]!;
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
