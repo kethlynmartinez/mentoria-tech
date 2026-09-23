@@ -28,6 +28,7 @@ function CareerChat(){
   const [typing,setTyping]=useState(false);
   const [attached,setAttached]=useState<string|null>(null);
   const [step,setStep]=useState(0);
+  const [usedNext,setUsedNext]=useState(false);
   const stepRef=useRef(0);
   const fileInput=useRef<HTMLInputElement>(null);
   const suggestions=["Analisar currículo","Analisar portfólio","Simular entrevista","Preparar para liderança","Encontrar uma mentora"];
