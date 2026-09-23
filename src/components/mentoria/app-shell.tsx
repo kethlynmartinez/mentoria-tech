@@ -47,7 +47,7 @@ function CareerChat(){
     stepRef.current+=1;
     const i=stepRef.current;
     setStep(i);
-    if(i<interviewQuestions.length)aiSay(interviewQuestions[i],[{label:"Próxima pergunta",kind:"next"}]);
+    if(i<interviewQuestions.length)aiSay(interviewQuestions[i]!,[{label:"Próxima pergunta",kind:"next"}]);
     else aiSay(interviewFeedback,[{label:"Agendar simulação completa",kind:"schedule",topic:"Simulação de entrevista"}]);
   };
   const onAction=(a:ChatAction)=>{if(a.kind==="next")nextQuestion()};
