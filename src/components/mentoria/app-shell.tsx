@@ -1,9 +1,8 @@
 import { useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BrainCircuit, FileText, Menu, Paperclip, Send, X } from "lucide-react";
+import { BrainCircuit, FileText, Paperclip, Send, X } from "lucide-react";
 import { Brand } from "./brand";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { PackageDialog, ScheduleDialog, TipsDialog } from "./actions";
@@ -180,5 +179,6 @@ function CareerChat() {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = useRouterState({ select: (state) => state.location.pathname });
-  return <><header className="sticky top-0 z-30 border-b border-card-border bg-background/90 backdrop-blur-xl"><div className="mx-auto flex h-20 max-w-[1200px] items-center justify-between px-5"><Link to="/"><Brand /></Link><nav className="hidden items-center gap-3 lg:flex">{links.map((link) => <Link key={link.to} to={link.to} className={cn("rounded-full px-3 py-2 text-sm font-medium", path === link.to ? "bg-lilac-soft text-primary" : "text-muted-foreground hover:text-primary")}>{link.label}</Link>)}</nav><div className="flex items-center gap-1"><Button asChild className="hidden sm:inline-flex"><Link to="/assinatura">Começar grátis</Link></Button><Sheet><SheetTrigger asChild><Button variant="ghost" size="icon" className="lg:hidden" aria-label="Abrir navegação"><Menu /></Button></SheetTrigger><SheetContent className="bg-background"><SheetHeader><SheetTitle><Brand /></SheetTitle><SheetDescription>Navegue pela MentorIA</SheetDescription></SheetHeader><div className="mt-8 flex flex-col gap-2">{links.map((link) => <Link key={link.to} to={link.to} className={cn("rounded-full px-4 py-3 font-medium", path === link.to ? "bg-lilac-soft text-primary" : "hover:bg-lilac-soft")}>{link.label}</Link>)}</div></SheetContent></Sheet></div></div></header><main>{children}</main><CareerChat /><Toaster position="top-center" /></>;
+  const navigation = links.map((link) => <Link key={link.to} to={link.to} className={cn("shrink-0 rounded-full px-3 py-2 text-sm font-medium", path === link.to ? "bg-lilac-soft text-primary" : "text-muted-foreground hover:text-primary")}>{link.label}</Link>);
+  return <><header className="sticky top-0 z-30 border-b border-card-border bg-background/90 backdrop-blur-xl"><div className="mx-auto max-w-[1200px] px-5"><div className="flex h-20 items-center justify-between"><Link to="/"><Brand /></Link><nav className="hidden items-center gap-3 lg:flex">{navigation}</nav><Button asChild className="hidden sm:inline-flex"><Link to="/assinatura">Começar grátis</Link></Button></div><nav className="flex w-full items-center gap-1 overflow-x-auto pb-3 lg:hidden">{navigation}</nav></div></header><main>{children}</main><CareerChat /><Toaster position="top-center" /></>;
 }
