@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { ArrowUpRight, Check, Star } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -9,7 +11,7 @@ export function IconBadge({ icon: Icon, inverse = false }: { icon: LucideIcon; i
 }
 
 export function ArrowButton({ label = "Ver detalhes" }: { label?: string }) {
-  return <Button variant="ghost" size="icon" aria-label={label} title={label} className="shrink-0 bg-ink text-primary-foreground hover:bg-primary hover:text-primary-foreground"><ArrowUpRight /></Button>;
+  return <span aria-hidden title={label} className="grid size-9 shrink-0 place-items-center rounded-full bg-ink text-primary-foreground transition group-hover:bg-primary"><ArrowUpRight className="size-4" /></span>;
 }
 
 export function SkillTag({ children }: { children: React.ReactNode }) {
@@ -41,8 +43,8 @@ export function Avatar({ name, tone="primary", size="md" }: {name:string;tone?:"
   return <div className={cn("grid shrink-0 place-items-center rounded-full font-semibold", size==="sm"?"size-10 text-xs":size==="lg"?"size-28 text-2xl":"size-12",tone==="primary"?"bg-primary text-primary-foreground":tone==="highlight"?"bg-highlight text-ink":"bg-mint text-ink")}>{name.split(" ").map(n=>n[0]).slice(0,2).join("")}</div>;
 }
 
-export function AvatarRow({ name, subtitle, tone="primary" }: {name:string;subtitle:string;tone?:"primary"|"highlight"|"mint"}) {
-  return <div className="flex items-center gap-3 border-b border-border py-4 last:border-0"><Avatar name={name} tone={tone}/><div className="min-w-0 flex-1"><p className="font-semibold">{name}</p><p className="truncate text-sm text-muted-foreground">{subtitle}</p></div><ArrowButton/></div>;
+export function AvatarRow({ id, name, subtitle, tone="primary" }: {id:string;name:string;subtitle:string;tone?:"primary"|"highlight"|"mint"}) {
+  return <Link to="/mentora/$id" params={{id}} className="group flex items-center gap-3 border-b border-border py-4 last:border-0"><Avatar name={name} tone={tone}/><div className="min-w-0 flex-1"><p className="font-semibold">{name}</p><p className="truncate text-sm text-muted-foreground">{subtitle}</p><span className="text-xs font-semibold text-primary">› Ver perfil</span></div><ArrowButton label="Ver perfil"/></Link>;
 }
 
 export function TestimonialCard({ name, area, quote, tone="primary" }: {name:string;area:string;quote:string;tone?:"primary"|"highlight"|"mint"}) {
@@ -50,11 +52,13 @@ export function TestimonialCard({ name, area, quote, tone="primary" }: {name:str
 }
 
 export function PlanCard({ title, price, features, popular=false, consult=false }: {title:string;price:string;features:{label:string;included:boolean}[];popular?:boolean;consult?:boolean}) {
-  return <Card variant="glass" spacing="large" className={cn("relative flex h-full flex-col",popular&&"md:-translate-y-4 md:scale-[1.03] border-primary")}>{popular&&<span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-vivid px-4 py-1 text-xs font-semibold text-primary-foreground">Mais popular</span>}<h3 className="text-center text-xl font-semibold">{title}</h3><div className="my-6 border-t border-card-dark"/><div className="text-center"><span className="text-4xl font-semibold">{consult?price:`R$ ${price}`}</span>{!consult&&<span className="text-sm text-primary-foreground/60">/mês</span>}</div><ul className="my-7 flex-1 space-y-3">{features.map(f=><li key={f.label} className={cn("flex gap-2 text-sm",!f.included&&"opacity-35")}><Check className="size-4 shrink-0 text-highlight"/>{f.label}</li>)}</ul><Button variant="dark" className="w-full">Começar agora</Button><p className="mt-4 text-center text-xs text-primary-foreground/55">7 dias grátis · depois cobrado conforme o plano</p></Card>;
+  return <Card variant="glass" spacing="large" className={cn("relative flex h-full flex-col",popular&&"md:-translate-y-4 md:scale-[1.03] border-primary")}>{popular&&<span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-vivid px-4 py-1 text-xs font-semibold text-primary-foreground">Mais popular</span>}<h3 className="text-center text-xl font-semibold">{title}</h3><div className="my-6 border-t border-card-dark"/><div className="text-center"><span className="text-4xl font-semibold">{consult?price:`R$ ${price}`}</span>{!consult&&<span className="text-sm text-primary-foreground/60">/mês</span>}</div><ul className="my-7 flex-1 space-y-3">{features.map(f=><li key={f.label} className={cn("flex gap-2 text-sm",!f.included&&"opacity-35")}><Check className="size-4 shrink-0 text-highlight"/>{f.label}</li>)}</ul><PlanStart title={title}/><p className="mt-4 text-center text-xs text-primary-foreground/55">7 dias grátis · depois cobrado conforme o plano</p></Card>;
 }
 
-export function ServiceCard({ icon:Icon,title,description,price,action }: {icon:LucideIcon;title:string;description:string;price:string;action:string}) {
-  return <Card className="flex h-full flex-col"><div className="flex items-start justify-between"><IconBadge icon={Icon}/><ArrowButton label={action}/></div><h3 className="mt-6 text-lg font-semibold">{title}</h3><p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{description}</p><p className="mt-5 font-semibold text-primary">{price}</p><Button variant="outline" className="mt-4 w-full">{action}</Button></Card>;
+function PlanStart({title}:{title:string}){const navigate=useNavigate();return <Button variant="dark" className="w-full" onClick={()=>{toast.success(`Teste grátis do plano ${title} iniciado`,{description:"Você tem 7 dias para explorar tudo."});navigate({to:"/perfil"})}}>Começar agora</Button>}
+
+export function ServiceCard({ icon:Icon,title,description,price,action,wrap }: {icon:LucideIcon;title:string;description:string;price:string;action:string;wrap:(button:React.ReactElement)=>React.ReactNode}) {
+  return <Card className="flex h-full flex-col"><div className="flex items-start justify-between"><IconBadge icon={Icon}/></div><h3 className="mt-6 text-lg font-semibold">{title}</h3><p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{description}</p><p className="mt-5 font-semibold text-primary">{price}</p>{wrap(<Button variant="outline" className="mt-4 w-full">{action}</Button>)}</Card>;
 }
 
 export function SectionTitle({ eyebrow, title, highlight, centered=false, inverse=false }: {eyebrow?:string;title:string;highlight?:string;centered?:boolean;inverse?:boolean}) {
