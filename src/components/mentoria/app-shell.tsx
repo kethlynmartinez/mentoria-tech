@@ -40,11 +40,12 @@ function CareerChat(){
     const v=value.toLowerCase();
     if(v.includes("currículo")||v.includes("curriculo"))aiSay("Análise do seu currículo: o resumo está genérico e faltam resultados com números. Priorize conquistas mensuráveis, limite a 2 páginas e alinhe as palavras-chave à vaga desejada.",[{label:"Ver dicas completas",kind:"tips"},{label:"Agendar mentoria de currículo",kind:"schedule",topic:"Mentoria de currículo"}]);
     else if(v.includes("portfólio")||v.includes("portfolio"))aiSay("Análise do seu portfólio: os projetos estão bem apresentados, mas a narrativa pode melhorar. Explique o problema, sua decisão técnica e o impacto final em cada case.",[{label:"Agendar revisão de portfólio",kind:"schedule",topic:"Revisão de portfólio"}]);
-    else if(v.includes("entrevista")){stepRef.current=0;setStep(0);aiSay(interviewQuestions[0]!,[{label:"Próxima pergunta",kind:"next"}])}
+    else if(v.includes("entrevista")){stepRef.current=0;setStep(0);setUsedNext(false);aiSay(interviewQuestions[0]!,[{label:"Próxima pergunta",kind:"next"}])}
     else if(v.includes("liderança")||v.includes("lideranca"))aiSay("Vamos mapear comunicação, influência e gestão de conflitos para seu próximo passo. Um bom exercício: escolha uma situação recente em que você precisou alinhar pessoas com opiniões diferentes.",[{label:"Agendar mentoria de liderança",kind:"schedule",topic:"Preparação para liderança"}]);
     else aiSay("Vou cruzar seu objetivo, experiência e área para sugerir perfis compatíveis.",[{label:"Responder ao questionário",kind:"link"}]);
   };
   const nextQuestion=()=>{
+    setUsedNext(true);
     stepRef.current+=1;
     const i=stepRef.current;
     setStep(i);
