@@ -92,11 +92,17 @@ function CareerChat() {
   const sendText = (value: string) => {
     const text = value.trim();
     if (!text) return;
-    setMessages((current) => [...current, { from: "user", text }]);
     const normalized = text.toLowerCase();
-    if (normalized.includes("currículo") || normalized.includes("curriculo")) requestFile("curriculo");
-    else if (normalized.includes("portfólio") || normalized.includes("portfolio")) requestFile("portfolio");
-    else if (normalized.includes("entrevista")) {
+    if (normalized.includes("currículo") || normalized.includes("curriculo")) {
+      requestFile("curriculo");
+      return;
+    }
+    if (normalized.includes("portfólio") || normalized.includes("portfolio")) {
+      requestFile("portfolio");
+      return;
+    }
+    setMessages((current) => [...current, { from: "user", text }]);
+    if (normalized.includes("entrevista")) {
       stepRef.current = 0;
       setUsedNext(false);
       aiSay(interviewQuestions[0] ?? "Conte sobre um desafio técnico que você resolveu recentemente.", [{ label: "Próxima pergunta", kind: "next" }]);
