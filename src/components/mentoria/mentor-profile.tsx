@@ -1,4 +1,4 @@
-import { BadgeDollarSign, CalendarDays, ChartNoAxesColumn, Crown, MessageCircle, Presentation, Sparkles, Star, Users } from "lucide-react";
+import { BadgeDollarSign, CalendarDays, ChartNoAxesColumn, Crown, Mail, MessageCircle, Presentation, Sparkles, Star, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, MiniBarChart, SectionTitle, ServiceCard, SkillTag, StatCard, TestimonialCard } from "./primitives";
@@ -8,6 +8,7 @@ import type { Mentor } from "./data";
 export function MentorProfile({ mentor: m }: { mentor: Mentor }) {
   const first = m.name.split(" ")[0];
   const tones = ["primary", "highlight", "mint"] as const;
+  const isMariana = m.id === "mariana-costa";
   return (
     <div className="soft-canvas overflow-x-clip">
       <section className="dark-rays h-[410px] pt-20 text-primary-foreground">
@@ -49,14 +50,14 @@ export function MentorProfile({ mentor: m }: { mentor: Mentor }) {
             <div className="mt-3 flex flex-wrap gap-2">{m.skills.map((s) => <SkillTag key={s}>{s}</SkillTag>)}</div>
           </Card>
         </div>
-        <section className="py-24">
+        {!isMariana && <section className="py-24">
           <SectionTitle eyebrow="Escolha seu formato" title="Serviços de mentoria" />
           <div className="grid gap-6 md:grid-cols-3">
             <ServiceCard icon={CalendarDays} title="Mentoria individual" description="Uma conversa focada no seu desafio atual e em próximos passos claros." price="R$ 129 · 60 minutos" action="Agendar" wrap={(b) => <ScheduleDialog mentor={m.name}>{b}</ScheduleDialog>} />
             <ServiceCard icon={Crown} title="Pacote Liderança" description="Quatro encontros para desenvolver comunicação, influência e gestão." price="R$ 449 · 4 encontros" action="Ver pacote" wrap={(b) => <PackageDialog id="lideranca" price="R$ 449">{b}</PackageDialog>} />
             <ServiceCard icon={Presentation} title="Revisão de Portfólio" description="Feedback sobre narrativa, impacto e apresentação dos seus projetos." price="R$ 99 · 1 encontro" action="Comprar" wrap={(b) => <PackageDialog id="portfolio" price="R$ 99">{b}</PackageDialog>} />
           </div>
-        </section>
+        </section>}
         <section className="grid gap-6 pb-24 lg:grid-cols-2">
           <Card spacing="large">
             <h2 className="text-lg font-semibold">Minha experiência</h2>
@@ -79,6 +80,12 @@ export function MentorProfile({ mentor: m }: { mentor: Mentor }) {
           <SectionTitle eyebrow="Avaliações" title={`O que dizem as mentorandas de ${first}`} />
           <div className="grid gap-6 md:grid-cols-3">{m.testimonials.map((t, i) => <TestimonialCard key={t.name} {...t} tone={tones[i % 3] ?? "primary"} />)}</div>
         </section>
+        {isMariana && <section className="pb-24">
+          <Card variant="gradient" spacing="large" className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+            <div><p className="text-sm font-semibold text-highlight">ENTRE EM CONTATO</p><h2 className="mt-2 text-2xl font-semibold">Converse com Mariana sobre sua mentoria.</h2><p className="mt-2 text-sm text-primary-foreground/70">Conte seu momento de carreira e consulte formatos e valores disponíveis.</p></div>
+            <MessageDialog to={m.name}><Button variant="light"><Mail />Consulte valores</Button></MessageDialog>
+          </Card>
+        </section>}
       </div>
     </div>
   );
