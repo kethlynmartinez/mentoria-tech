@@ -8,4 +8,4 @@
 - [x] Reordenar o header e remover os acessos diretos a Encontrar Mentora e o ícone de menu
 - [x] Remover Serviços do perfil de Mariana e adicionar contato com Consulte valores
 - [x] Corrigir o fluxo de seleção, envio e análise de currículo e portfólio no chat
-- [ ] Validar rotas, fluxos do chat e responsividade sem regressões
+- [x] Validar rotas, fluxos do chat e responsividade sem regressões
