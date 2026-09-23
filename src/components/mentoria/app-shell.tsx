@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { PackageDialog, ScheduleDialog, TipsDialog } from "./actions";
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
 import { Message, MessageContent } from "@/components/ai-elements/message";
+import { PromptInput, PromptInputButton, PromptInputFooter, PromptInputHeader, PromptInputSubmit, PromptInputTextarea, usePromptInputAttachments, type PromptInputMessage } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 
 const links = [
@@ -29,15 +30,24 @@ const interviewQuestions = [
 ];
 const interviewFeedback = "Simulação concluída! Pontos fortes: clareza ao contar experiências e vocabulário técnico. Para evoluir: traga mais resultados com números e conecte cada resposta ao impacto no time.";
 
+function PendingAttachments() {
+  const attachments = usePromptInputAttachments();
+  if (attachments.files.length === 0) return null;
+  return <PromptInputHeader>{attachments.files.map((file) => <div key={file.id} className="flex w-full items-center justify-between gap-2 rounded-full bg-lilac-soft px-4 py-2 text-xs text-primary"><span className="flex min-w-0 items-center gap-2"><FileText className="size-4 shrink-0" /><span className="truncate">{file.filename ?? "Arquivo"} anexado</span></span><Button type="button" variant="ghost" size="icon-sm" onClick={() => attachments.remove(file.id)} aria-label="Remover anexo"><X className="size-3.5" /></Button></div>)}</PromptInputHeader>;
+}
+
+function AttachmentButton() {
+  const attachments = usePromptInputAttachments();
+  return <PromptInputButton type="button" variant="outline" size="icon" aria-label="Anexar arquivo" onClick={attachments.openFileDialog}><Paperclip /></PromptInputButton>;
+}
+
 function CareerChat() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [typing, setTyping] = useState(false);
-  const [attached, setAttached] = useState<string | null>(null);
   const [analysisKind, setAnalysisKind] = useState<AnalysisKind | null>(null);
   const [usedNext, setUsedNext] = useState(false);
   const stepRef = useRef(0);
-  const fileInput = useRef<HTMLInputElement>(null);
   const suggestions = ["Analisar currículo", "Analisar portfólio", "Simular entrevista", "Preparar para liderança", "Encontrar uma mentora"];
 
   const aiSay = (text: string, actions?: ChatAction[]) => {
@@ -67,7 +77,6 @@ function CareerChat() {
       : [{ label: "Ver pacote de Portfólio", kind: "package" }];
 
     setMessages((current) => [...current, { from: "user", text: `${name} enviado`, file: name }]);
-    setAttached(null);
     setAnalysisKind(null);
     setTyping(true);
     window.setTimeout(() => {
@@ -118,18 +127,15 @@ function CareerChat() {
     else sendText(value);
   };
 
-  const submitMessage = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const text = String(new FormData(form).get("message") ?? "").trim();
-    if (attached) {
-      const inferredKind = analysisKind ?? (attached.toLowerCase().includes("portfolio") || attached.toLowerCase().includes("portfólio") ? "portfolio" : "curriculo");
-      analyzeFile(attached, inferredKind);
-      form.reset();
+  const submitMessage = (message: PromptInputMessage) => {
+    const file = message.files[0];
+    const name = file?.filename;
+    if (name) {
+      const inferredKind = analysisKind ?? (name.toLowerCase().includes("portfolio") || name.toLowerCase().includes("portfólio") ? "portfolio" : "curriculo");
+      analyzeFile(name, inferredKind);
       return;
     }
-    sendText(text);
-    form.reset();
+    sendText(message.text);
   };
 
   const renderAction = (action: ChatAction, key: string, stale: boolean) => {
@@ -162,13 +168,11 @@ function CareerChat() {
           <ConversationScrollButton />
         </Conversation>
         <div className="border-t border-border p-3">
-          {attached && <div className="mb-2 flex items-center justify-between gap-2 rounded-full bg-lilac-soft px-4 py-2 text-xs text-primary"><span className="flex min-w-0 items-center gap-2"><FileText className="size-4 shrink-0" /><span className="truncate">{attached} anexado</span></span><Button type="button" variant="ghost" size="icon-sm" onClick={() => setAttached(null)} aria-label="Remover anexo"><X className="size-3.5" /></Button></div>}
-          <form onSubmit={submitMessage} className="flex items-center gap-2">
-            <input ref={fileInput} type="file" accept=".pdf,.doc,.docx,.txt,.md,image/*" className="hidden" onChange={(event) => { const file = event.target.files?.[0]; if (file) setAttached(file.name); event.target.value = ""; }} aria-label="Selecionar currículo ou portfólio" />
-            <Button type="button" variant="outline" size="icon" aria-label="Anexar arquivo" onClick={() => fileInput.current?.click()}><Paperclip /></Button>
-            <input name="message" aria-label="Mensagem" placeholder={attached ? "Arquivo pronto para enviar" : "Digite sua pergunta"} className="h-10 min-w-0 flex-1 rounded-full bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-primary/30" />
-            <Button type="submit" size="icon" aria-label={attached ? "Enviar arquivo" : "Enviar mensagem"} disabled={typing}><Send /></Button>
-          </form>
+          <PromptInput accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/*" maxFiles={1} maxFileSize={20 * 1024 * 1024} onSubmit={submitMessage} onError={() => undefined}>
+            <PendingAttachments />
+            <PromptInputTextarea aria-label="Mensagem" placeholder="Digite sua pergunta" className="min-h-10 rounded-full bg-muted px-4 py-2 text-sm" />
+            <PromptInputFooter><AttachmentButton /><PromptInputSubmit aria-label="Enviar mensagem ou arquivo" disabled={typing} status={typing ? "streaming" : "ready"}><Send /></PromptInputSubmit></PromptInputFooter>
+          </PromptInput>
           <p className="mt-2 text-center text-[10px] text-muted-foreground">Recurso gratuito, mesmo sem mentoria contratada.</p>
         </div>
       </div>}
