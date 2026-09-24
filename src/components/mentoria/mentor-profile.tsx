@@ -54,12 +54,12 @@ export function MentorProfile({ mentor: m }: { mentor: Mentor }) {
           <SectionTitle eyebrow="Escolha seu formato" title="Serviços de mentoria" />
           <div className="grid gap-6 md:grid-cols-3">
             <ServiceCard icon={CalendarDays} title="Mentoria individual" description="Uma conversa focada no seu desafio atual e em próximos passos claros." price="R$ 129 · 60 minutos" action="Agendar" wrap={(b) => <ScheduleDialog mentor={m.name}>{b}</ScheduleDialog>} />
-            <ServiceCard icon={Crown} title="Pacote Liderança" description="Quatro encontros para desenvolver comunicação, influência e gestão." price="R$ 449 · 4 encontros" action="Ver pacote" wrap={(b) => <PackageDialog id="lideranca" price="R$ 449">{b}</PackageDialog>} />
+            <ServiceCard icon={Crown} title="Pacote Liderança" description="Quatro encontros para desenvolver comunicação, influência e gestão." price="R$ 449 · 4 encontros" action="Ver pacote" variant="highlight" wrap={(b) => <PackageDialog id="lideranca" price="R$ 449">{b}</PackageDialog>} />
             <ServiceCard icon={Presentation} title="Revisão de Portfólio" description="Feedback sobre narrativa, impacto e apresentação dos seus projetos." price="R$ 99 · 1 encontro" action="Comprar" wrap={(b) => <PackageDialog id="portfolio" price="R$ 99">{b}</PackageDialog>} />
           </div>
         </section>}
-        <section className="grid gap-6 pb-24 lg:grid-cols-2">
-          <Card spacing="large">
+        <section className="grid gap-6 pb-24 lg:grid-cols-3">
+          <Card variant="highlight" spacing="large" className="h-full">
             <h2 className="text-lg font-semibold">Minha experiência</h2>
             <div className="mt-6">
               {m.experience.map(([role, company, date], i) => (
@@ -70,11 +70,8 @@ export function MentorProfile({ mentor: m }: { mentor: Mentor }) {
               ))}
             </div>
           </Card>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <Card><BadgeDollarSign className="size-8 text-primary" /><h3 className="mt-4 font-semibold">Remuneração</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">As mentorias realizadas pela plataforma geram remuneração para a mentora.</p></Card>
-            <Card variant="highlight"><span className="rounded-full bg-card/55 px-3 py-1 text-xs font-semibold">Em breve</span><h3 className="mt-4 font-semibold">Programa de Parceiras</h3><p className="mt-2 text-sm leading-6 opacity-70">Mentoras que contribuem continuamente para a comunidade poderão participar de programas especiais de parceria da plataforma.</p></Card>
-            <Card variant="gradient" className="sm:col-span-2"><div className="flex items-start justify-between"><div><p className="text-sm text-primary-foreground/60">Impacto na comunidade</p><p className="mt-2 text-3xl font-semibold">+{m.sessions * 2} horas compartilhadas</p></div><Sparkles /></div></Card>
-          </div>
+          <Card className="h-full"><BadgeDollarSign className="size-8 text-primary" /><h3 className="mt-4 font-semibold">Remuneração</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">As mentorias realizadas pela plataforma geram remuneração para a mentora.</p></Card>
+          <Card variant="gradient" className="h-full"><span className="rounded-full bg-card/15 px-3 py-1 text-xs font-semibold">Em breve</span><h3 className="mt-4 font-semibold">Programa de Parceiras</h3><p className="mt-2 text-sm leading-6 text-primary-foreground/70">Mentoras que contribuem continuamente para a comunidade poderão participar de programas especiais de parceria da plataforma.</p><div className="mt-6 flex items-center gap-2 text-sm text-primary-foreground/70"><Sparkles className="size-4"/>+{m.sessions * 2} horas compartilhadas</div></Card>
         </section>
         <section className="pb-24">
           <SectionTitle eyebrow="Avaliações" title={`O que dizem as mentorandas de ${first}`} />
