@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { ArrowUpRight, Check, Star } from "lucide-react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -43,8 +43,8 @@ export function Avatar({ name, tone="primary", size="md" }: {name:string;tone?:"
   return <div className={cn("grid shrink-0 place-items-center rounded-full font-semibold", size==="sm"?"size-10 text-xs":size==="lg"?"size-28 text-2xl":"size-12",tone==="primary"?"bg-primary text-primary-foreground":tone==="highlight"?"bg-highlight text-ink":"bg-mint text-ink")}>{name.split(" ").map(n=>n[0]).slice(0,2).join("")}</div>;
 }
 
-export function AvatarRow({ id, name, subtitle, tone="primary" }: {id:string;name:string;subtitle:string;tone?:"primary"|"highlight"|"mint"}) {
-  return <Link to="/mentora" className="group flex items-center gap-3 border-b border-border py-4 last:border-0"><Avatar name={name} tone={tone}/><div className="min-w-0 flex-1"><p className="font-semibold">{name}</p><p className="truncate text-sm text-muted-foreground">{subtitle}</p><span className="text-xs font-semibold text-primary">› Ver perfil</span></div><ArrowButton label="Ver perfil"/></Link>;
+export function AvatarRow({ name, subtitle }: {id:string;name:string;subtitle:string;tone?:"primary"|"highlight"|"mint"}) {
+  return <div className="border-b border-border py-4 last:border-0"><p className="font-semibold">{name}</p><p className="mt-1 text-sm text-muted-foreground">{subtitle}</p></div>;
 }
 
 export function TestimonialCard({ name, area, quote, tone="primary" }: {name:string;area:string;quote:string;tone?:"primary"|"highlight"|"mint"}) {
