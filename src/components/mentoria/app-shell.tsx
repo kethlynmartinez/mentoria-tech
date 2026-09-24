@@ -20,7 +20,7 @@ const links = [
 ] as const;
 
 type AnalysisKind = "curriculo" | "portfolio";
-type ChatAction = { label: string; kind: "tips" | "schedule" | "package" | "next" | "link"; topic?: string };
+type ChatAction = { label: string; kind: "tips" | "schedule" | "package" | "next" | "link"; topic?: string; mentor?: string };
 type ChatMessage = { from: "user" | "ai"; text: string; actions?: ChatAction[] | undefined; file?: string | undefined };
 
 const interviewQuestions = [
@@ -29,6 +29,11 @@ const interviewQuestions = [
   "Última pergunta: onde você se vê daqui a dois anos e o que falta para chegar lá?",
 ];
 const interviewFeedback = "Simulação concluída! Pontos fortes: clareza ao contar experiências e vocabulário técnico. Para evoluir: traga mais resultados com números e conecte cada resposta ao impacto no time.";
+const careerMentors = {
+  curriculo: "Raquel Gomes",
+  portfolio: "Bruna Soares",
+  entrevista: "Joana Martins",
+} as const;
 
 function PendingAttachments() {
   const attachments = usePromptInputAttachments();
@@ -61,19 +66,19 @@ function CareerChat() {
   const requestFile = (kind: AnalysisKind) => {
     setAnalysisKind(kind);
     setMessages((current) => [...current, { from: "user", text: kind === "curriculo" ? "Analisar currículo" : "Analisar portfólio" }]);
-    aiSay(kind === "curriculo" ? "Envie seu currículo para que eu faça a análise." : "Envie seu portfólio para que eu faça a análise.");
+    aiSay(kind === "curriculo" ? `${careerMentors.curriculo} fará sua análise. Envie seu currículo.` : `${careerMentors.portfolio} fará sua análise. Envie seu portfólio.`);
   };
 
   const analyzeFile = (name: string, kind: AnalysisKind) => {
     const label = kind === "curriculo" ? "currículo" : "portfólio";
     const confirmation = kind === "curriculo"
-      ? "Recebi seu currículo. Vou analisar a estrutura, o conteúdo e a apresentação."
-      : "Recebi seu portfólio. Vou analisar os projetos, a narrativa e a apresentação.";
+      ? `${careerMentors.curriculo} recebeu seu currículo e vai analisar a estrutura, o conteúdo e a apresentação.`
+      : `${careerMentors.portfolio} recebeu seu portfólio e vai analisar os projetos, a narrativa e a apresentação.`;
     const feedback = kind === "curriculo"
-      ? "Aqui está meu feedback: sua experiência técnica está bem descrita. Adicione resultados quantificados, como “reduzi o tempo de carregamento em 30%”, e destaque projetos de liderança."
-      : "Aqui está meu feedback: seu portfólio tem bons projetos. Adicione um estudo de caso detalhado explicando o problema, suas decisões e o processo, não apenas o resultado final.";
+      ? `Feedback de ${careerMentors.curriculo}: sua experiência técnica está bem descrita. Adicione resultados quantificados, como “reduzi o tempo de carregamento em 30%”, e destaque projetos de liderança.`
+      : `Feedback de ${careerMentors.portfolio}: seu portfólio tem bons projetos. Adicione um estudo de caso detalhado explicando o problema, suas decisões e o processo, não apenas o resultado final.`;
     const actions: ChatAction[] = kind === "curriculo"
-      ? [{ label: "Ver dicas completas", kind: "tips" }, { label: "Agendar mentoria de currículo", kind: "schedule", topic: "Mentoria de currículo" }]
+      ? [{ label: "Ver dicas completas", kind: "tips" }, { label: "Agendar mentoria de currículo", kind: "schedule", topic: "Mentoria de currículo", mentor: careerMentors.curriculo }]
       : [{ label: "Ver pacote de Portfólio", kind: "package" }];
 
     setMessages((current) => [...current, { from: "user", text: `${name} enviado`, file: name }]);
@@ -93,8 +98,8 @@ function CareerChat() {
     setUsedNext(true);
     stepRef.current += 1;
     const next = interviewQuestions[stepRef.current];
-    if (next) aiSay(next, [{ label: "Próxima pergunta", kind: "next" }]);
-    else aiSay(interviewFeedback, [{ label: "Agendar simulação completa", kind: "schedule", topic: "Simulação de entrevista" }]);
+    if (next) aiSay(`${careerMentors.entrevista}: ${next}`, [{ label: "Próxima pergunta", kind: "next" }]);
+    else aiSay(`${careerMentors.entrevista}: ${interviewFeedback}`, [{ label: "Agendar simulação completa", kind: "schedule", topic: "Simulação de entrevista", mentor: careerMentors.entrevista }]);
   };
 
   const sendText = (value: string) => {
@@ -113,7 +118,7 @@ function CareerChat() {
     if (normalized.includes("entrevista")) {
       stepRef.current = 0;
       setUsedNext(false);
-      aiSay(interviewQuestions[0] ?? "Conte sobre um desafio técnico que você resolveu recentemente.", [{ label: "Próxima pergunta", kind: "next" }]);
+      aiSay(`${careerMentors.entrevista}: ${interviewQuestions[0] ?? "Conte sobre um desafio técnico que você resolveu recentemente."}`, [{ label: "Próxima pergunta", kind: "next" }]);
     } else if (normalized.includes("liderança") || normalized.includes("lideranca")) {
       aiSay("Vamos mapear comunicação, influência e gestão de conflitos para seu próximo passo.", [{ label: "Agendar mentoria de liderança", kind: "schedule", topic: "Preparação para liderança" }]);
     } else {
@@ -141,7 +146,7 @@ function CareerChat() {
   const renderAction = (action: ChatAction, key: string, stale: boolean) => {
     const trigger = <Button variant="outline" size="sm">{action.label}</Button>;
     if (action.kind === "tips") return <TipsDialog key={key}>{trigger}</TipsDialog>;
-    if (action.kind === "schedule") return <ScheduleDialog key={key} {...(action.topic ? { topic: action.topic } : {})}>{trigger}</ScheduleDialog>;
+    if (action.kind === "schedule") return <ScheduleDialog key={key} {...(action.topic ? { topic: action.topic } : {})} {...(action.mentor ? { mentor: action.mentor } : {})}>{trigger}</ScheduleDialog>;
     if (action.kind === "package") return <PackageDialog key={key} id="portfolio">{trigger}</PackageDialog>;
     if (action.kind === "link") return <Button key={key} asChild variant="outline" size="sm"><Link to="/questionario">{action.label}</Link></Button>;
     return <Button key={key} variant="outline" size="sm" disabled={stale} onClick={nextQuestion}>{action.label}</Button>;
