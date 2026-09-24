@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AssinaturaRouteImport } from './routes/assinatura'
 import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as QuestionarioRouteImport } from './routes/questionario'
 import { Route as SobreRouteImport } from './routes/sobre'
@@ -30,6 +31,11 @@ const AssinaturaRoute = AssinaturaRouteImport.update({
 const CadastroRoute = CadastroRouteImport.update({
   id: '/cadastro',
   path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
   '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
   '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
   '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/assinatura'
     | '/cadastro'
+    | '/login'
     | '/perfil'
     | '/questionario'
     | '/sobre'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/assinatura'
     | '/cadastro'
+    | '/login'
     | '/perfil'
     | '/questionario'
     | '/sobre'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/assinatura'
     | '/cadastro'
+    | '/login'
     | '/perfil'
     | '/questionario'
     | '/sobre'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssinaturaRoute: typeof AssinaturaRoute
   CadastroRoute: typeof CadastroRoute
+  LoginRoute: typeof LoginRoute
   PerfilRoute: typeof PerfilRoute
   QuestionarioRoute: typeof QuestionarioRoute
   SobreRoute: typeof SobreRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/cadastro'
       fullPath: '/cadastro'
       preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssinaturaRoute: AssinaturaRoute,
   CadastroRoute: CadastroRoute,
+  LoginRoute: LoginRoute,
   PerfilRoute: PerfilRoute,
   QuestionarioRoute: QuestionarioRoute,
   SobreRoute: SobreRoute,
