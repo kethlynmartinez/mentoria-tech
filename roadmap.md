@@ -16,3 +16,4 @@
 - [x] Criar e conectar a página /cadastro
 - [x] Atualizar preços das mentorias avulsas e promoção de Entrevista
 - [x] Validar rotas, chat, cadastro e responsividade após os ajustes
+- [x] Reorganizar os cards da mentora e corrigir o contraste dos textos solicitados

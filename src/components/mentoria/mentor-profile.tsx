@@ -58,14 +58,14 @@ export function MentorProfile({ mentor: m }: { mentor: Mentor }) {
             <ServiceCard icon={Presentation} title="Revisão de Portfólio" description="Feedback sobre narrativa, impacto e apresentação dos seus projetos." price="R$ 99 · 1 encontro" action="Comprar" wrap={(b) => <PackageDialog id="portfolio" price="R$ 99">{b}</PackageDialog>} />
           </div>
         </section>}
-        <section className="grid gap-6 pb-24 lg:grid-cols-3">
+        <section className="mt-6 grid items-stretch gap-6 pb-24 lg:grid-cols-3">
           <Card variant="highlight" spacing="large" className="h-full">
             <h2 className="text-lg font-semibold">Minha experiência</h2>
             <div className="mt-6">
               {m.experience.map(([role, company, date], i) => (
                 <div key={role} className="relative flex gap-4 pb-7 last:pb-0">
                   <div className="flex flex-col items-center"><i className="size-4 rounded-full bg-primary ring-4 ring-lilac-soft" />{i < m.experience.length - 1 && <i className="mt-2 h-full w-px bg-border" />}</div>
-                  <div><p className="font-semibold">{role}</p><p className="text-sm text-muted-foreground">{company} · {date}</p></div>
+                  <div><p className="font-semibold">{role}</p><p className="text-sm text-primary-foreground">{company} · {date}</p></div>
                 </div>
               ))}
             </div>
@@ -79,7 +79,7 @@ export function MentorProfile({ mentor: m }: { mentor: Mentor }) {
         </section>
         {isMariana && <section className="pb-24">
           <Card variant="gradient" spacing="large" className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-            <div><p className="text-sm font-semibold text-highlight">ENTRE EM CONTATO</p><h2 className="mt-2 text-2xl font-semibold">Converse com Mariana sobre sua mentoria.</h2><p className="mt-2 text-sm text-primary-foreground/70">Conte seu momento de carreira e consulte formatos e valores disponíveis.</p></div>
+            <div><p className="text-sm font-semibold text-primary-foreground">ENTRE EM CONTATO</p><h2 className="mt-2 text-2xl font-semibold">Converse com Mariana sobre sua mentoria.</h2><p className="mt-2 text-sm text-primary-foreground">Conte seu momento de carreira e consulte formatos e valores disponíveis.</p></div>
             <MessageDialog to={m.name}><Button variant="light"><Mail />Consulte valores</Button></MessageDialog>
           </Card>
         </section>}
