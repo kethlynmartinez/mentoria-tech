@@ -44,7 +44,7 @@ export function Avatar({ name, tone="primary", size="md" }: {name:string;tone?:"
 }
 
 export function AvatarRow({ id, name, subtitle, tone="primary" }: {id:string;name:string;subtitle:string;tone?:"primary"|"highlight"|"mint"}) {
-  return <Link to="/mentora/$id" params={{id}} className="group flex items-center gap-3 border-b border-border py-4 last:border-0"><Avatar name={name} tone={tone}/><div className="min-w-0 flex-1"><p className="font-semibold">{name}</p><p className="truncate text-sm text-muted-foreground">{subtitle}</p><span className="text-xs font-semibold text-primary">› Ver perfil</span></div><ArrowButton label="Ver perfil"/></Link>;
+  return <Link to="/mentora" className="group flex items-center gap-3 border-b border-border py-4 last:border-0"><Avatar name={name} tone={tone}/><div className="min-w-0 flex-1"><p className="font-semibold">{name}</p><p className="truncate text-sm text-muted-foreground">{subtitle}</p><span className="text-xs font-semibold text-primary">› Ver perfil</span></div><ArrowButton label="Ver perfil"/></Link>;
 }
 
 export function TestimonialCard({ name, area, quote, tone="primary" }: {name:string;area:string;quote:string;tone?:"primary"|"highlight"|"mint"}) {

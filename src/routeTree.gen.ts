@@ -12,11 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AssinaturaRouteImport } from './routes/assinatura'
 import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as QuestionarioRouteImport } from './routes/questionario'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as MentoraIndexRouteImport } from './routes/mentora.index'
-import { Route as MentoraIdRouteImport } from './routes/mentora.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -31,6 +31,11 @@ const AssinaturaRoute = AssinaturaRouteImport.update({
 const CadastroRoute = CadastroRouteImport.update({
   id: '/cadastro',
   path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -53,30 +58,25 @@ const MentoraIndexRoute = MentoraIndexRouteImport.update({
   path: '/mentora/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MentoraIdRoute = MentoraIdRouteImport.update({
-  id: '/mentora/$id',
-  path: '/mentora/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
   '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
-  '/mentora/$id': typeof MentoraIdRoute
   '/mentora/': typeof MentoraIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
   '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
-  '/mentora/$id': typeof MentoraIdRoute
   '/mentora': typeof MentoraIndexRoute
 }
 export interface FileRoutesById {
@@ -84,10 +84,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
   '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
-  '/mentora/$id': typeof MentoraIdRoute
   '/mentora/': typeof MentoraIndexRoute
 }
 export interface FileRouteTypes {
@@ -96,30 +96,30 @@ export interface FileRouteTypes {
     | '/'
     | '/assinatura'
     | '/cadastro'
+    | '/login'
     | '/perfil'
     | '/questionario'
     | '/sobre'
-    | '/mentora/$id'
     | '/mentora/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/assinatura'
     | '/cadastro'
+    | '/login'
     | '/perfil'
     | '/questionario'
     | '/sobre'
-    | '/mentora/$id'
     | '/mentora'
   id:
     | '__root__'
     | '/'
     | '/assinatura'
     | '/cadastro'
+    | '/login'
     | '/perfil'
     | '/questionario'
     | '/sobre'
-    | '/mentora/$id'
     | '/mentora/'
   fileRoutesById: FileRoutesById
 }
@@ -127,10 +127,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssinaturaRoute: typeof AssinaturaRoute
   CadastroRoute: typeof CadastroRoute
+  LoginRoute: typeof LoginRoute
   PerfilRoute: typeof PerfilRoute
   QuestionarioRoute: typeof QuestionarioRoute
   SobreRoute: typeof SobreRoute
-  MentoraIdRoute: typeof MentoraIdRoute
   MentoraIndexRoute: typeof MentoraIndexRoute
 }
 
@@ -155,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/cadastro'
       fullPath: '/cadastro'
       preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -185,13 +192,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MentoraIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mentora/$id': {
-      id: '/mentora/$id'
-      path: '/mentora/$id'
-      fullPath: '/mentora/$id'
-      preLoaderRoute: typeof MentoraIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -199,10 +199,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssinaturaRoute: AssinaturaRoute,
   CadastroRoute: CadastroRoute,
+  LoginRoute: LoginRoute,
   PerfilRoute: PerfilRoute,
   QuestionarioRoute: QuestionarioRoute,
   SobreRoute: SobreRoute,
-  MentoraIdRoute: MentoraIdRoute,
   MentoraIndexRoute: MentoraIndexRoute,
 }
 export const routeTree = rootRouteImport
