@@ -44,7 +44,7 @@ function Questionnaire() {
       <div className="mx-auto max-w-3xl px-5 py-16">
         {phase === "form" && (
           <>
-            <span className="inline-flex items-center gap-2 rounded-full bg-lilac-soft px-4 py-2 text-xs font-semibold text-primary"><Sparkles className="size-4" />Leva cerca de 2 minutos</span>
+            <span className="inline-flex items-center gap-2 rounded-full bg-lilac-soft px-4 py-2 text-xs font-semibold text-ink"><Sparkles className="size-4" />Leva cerca de 2 minutos</span>
             <h1 className="mt-6 text-4xl font-bold leading-tight sm:text-5xl">Vamos entender melhor sua <span className="text-gradient">carreira</span>.</h1>
             <p className="mt-4 text-muted-foreground">Suas respostas ajudam a IA a encontrar mentoras com a experiência certa para o seu momento.</p>
             <form onSubmit={submit} className="mt-10 space-y-6">
@@ -59,7 +59,7 @@ function Questionnaire() {
                   </div>
                 </Card>
               ))}
-              <Card>
+              <Card variant="highlight">
                 <p className="text-xs font-semibold text-primary">PERGUNTA 5 DE 6</p>
                 <label htmlFor="dificuldade" className="mt-2 block text-lg font-semibold">Conte um pouco mais — você tem alguma dificuldade específica no momento?</label>
                 <textarea id="dificuldade" placeholder="Ex.: tenho dificuldade em falar sobre minhas conquistas em entrevistas..." className="mt-4 min-h-32 w-full rounded-inner bg-muted p-5 text-sm outline-hidden focus:ring-2 focus:ring-primary/30" />
@@ -93,7 +93,7 @@ function Questionnaire() {
               <p className="font-semibold">Quer acompanhar tudo em um só lugar?</p>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">Crie sua conta gratuita na MentorIA e acesse seu match, agende mentorias e acompanhe sua evolução.</p>
               <div className="mt-5 flex flex-wrap items-center gap-4">
-                <Button asChild><Link to="/perfil">Criar minha conta grátis</Link></Button>
+                <Button asChild><Link to="/cadastro">Criar minha conta grátis</Link></Button>
                 <Link to="/" className="text-sm font-semibold text-primary">Voltar para a Home</Link>
               </div>
             </div>

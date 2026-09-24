@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export function IconBadge({ icon: Icon, inverse = false }: { icon: LucideIcon; inverse?: boolean }) {
-  return <span className={cn("grid size-12 shrink-0 place-items-center rounded-full", inverse ? "bg-card/15 text-primary-foreground" : "bg-lilac-soft text-primary")}><Icon className="size-5" /></span>;
+  return <span className={cn("grid size-12 shrink-0 place-items-center rounded-full", inverse ? "bg-card/15 text-primary-foreground" : "bg-lilac-soft text-ink")}><Icon className="size-5" /></span>;
 }
 
 export function ArrowButton({ label = "Ver detalhes" }: { label?: string }) {
@@ -15,7 +15,7 @@ export function ArrowButton({ label = "Ver detalhes" }: { label?: string }) {
 }
 
 export function SkillTag({ children }: { children: React.ReactNode }) {
-  return <span className="inline-flex rounded-full bg-lilac-soft px-3 py-1.5 text-xs font-semibold text-primary">{children}</span>;
+  return <span className="inline-flex rounded-full bg-lilac-soft px-3 py-1.5 text-xs font-semibold text-ink">{children}</span>;
 }
 
 export function RatingStars({ value = 5 }: { value?: number }) {
@@ -57,8 +57,9 @@ export function PlanCard({ title, price, features, popular=false, consult=false 
 
 function PlanStart({title}:{title:string}){const navigate=useNavigate();return <Button variant="dark" className="w-full" onClick={()=>{toast.success(`Teste grátis do plano ${title} iniciado`,{description:"Você tem 7 dias para explorar tudo."});navigate({to:"/perfil"})}}>Começar agora</Button>}
 
-export function ServiceCard({ icon:Icon,title,description,price,action,wrap }: {icon:LucideIcon;title:string;description:string;price:string;action:string;wrap:(button:React.ReactElement)=>React.ReactNode}) {
-  return <Card className="flex h-full flex-col"><div className="flex items-start justify-between"><IconBadge icon={Icon}/></div><h3 className="mt-6 text-lg font-semibold">{title}</h3><p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{description}</p><p className="mt-5 font-semibold text-primary">{price}</p>{wrap(<Button variant="outline" className="mt-4 w-full">{action}</Button>)}</Card>;
+export function ServiceCard({ icon:Icon,title,description,price,action,wrap,variant="default",badge,previousPrice }: {icon:LucideIcon;title:string;description:string;price:string;action:string;wrap:(button:React.ReactElement)=>React.ReactNode;variant?:"default"|"highlight"|"gradient"|"dark"|"glass";badge?:string;previousPrice?:string}) {
+  const inverse=variant==="gradient"||variant==="dark"||variant==="glass";
+  return <Card variant={variant} className="flex h-full flex-col"><div className="flex items-start justify-between gap-3"><IconBadge icon={Icon} inverse={inverse}/>{badge&&<span className="rounded-full bg-coral px-3 py-1 text-xs font-semibold text-primary-foreground">{badge}</span>}</div><h3 className="mt-6 text-lg font-semibold">{title}</h3><p className={cn("mt-2 flex-1 text-sm leading-6",inverse?"text-primary-foreground/70":"text-muted-foreground")}>{description}</p><div className="mt-5">{previousPrice&&<p className={cn("text-xs line-through",inverse?"text-primary-foreground/55":"text-muted-foreground")}>{previousPrice}</p>}<p className={cn("font-semibold",inverse?"text-primary-foreground":"text-ink")}>{price}</p></div>{wrap(<Button variant={inverse?"light":"outline"} className="mt-4 w-full">{action}</Button>)}</Card>;
 }
 
 export function SectionTitle({ eyebrow, title, highlight, centered=false, inverse=false }: {eyebrow?:string;title:string;highlight?:string;centered?:boolean;inverse?:boolean}) {

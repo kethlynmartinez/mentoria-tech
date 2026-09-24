@@ -100,7 +100,7 @@ export function ReviewDialog({ children }: TriggerProps) {
       <DialogContent className={dialogClass}>
         <DialogHeader>
           <DialogTitle className="text-2xl">Avaliar mentoria</DialogTitle>
-          <DialogDescription>Marina Lopes · Entrevista técnica · 12 ago</DialogDescription>
+          <DialogDescription>Raquel Lopes · Entrevista técnica · 12 ago</DialogDescription>
         </DialogHeader>
         <div className="flex gap-1">{[1, 2, 3, 4, 5].map((n) => <button key={n} aria-label={`${n} estrelas`} onClick={() => setStars(n)}><Star className={cn("size-8", n <= stars ? "fill-yellow text-yellow" : "text-muted-foreground/30")} /></button>)}</div>
         <textarea placeholder="Como foi sua experiência?" className="min-h-28 rounded-inner bg-muted p-4 text-sm outline-hidden focus:ring-2 focus:ring-primary/30" />
