@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -15,12 +15,17 @@ const inputClass = "h-12 w-full rounded-full bg-muted px-5 text-sm text-ink outl
 
 function SignUp() {
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const valid = name.trim() !== "" && email.trim() !== "" && password.length >= 6;
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
+    if (!valid) return;
     setLoading(true);
     window.setTimeout(() => {
-      toast.success("Conta criada com sucesso!", { description: "Bem-vinda à MentorIA." });
+      toast.success("Conta criada com sucesso! Bem-vinda à MentorIA 🎉");
       navigate({ to: "/perfil" });
     }, 700);
   };
@@ -32,12 +37,12 @@ function SignUp() {
           <h1 className="mt-6 text-3xl font-bold sm:text-4xl">Criar <span className="text-gradient">conta</span></h1>
           <p className="mt-2 text-sm text-muted-foreground">Gratuita, leva menos de um minuto.</p>
           <form onSubmit={submit} className="mt-8 space-y-4">
-            <label className="block text-sm font-medium text-ink">Nome<input required className={`${inputClass} mt-2`} placeholder="Seu nome" /></label>
-            <label className="block text-sm font-medium text-ink">E-mail<input required type="email" className={`${inputClass} mt-2`} placeholder="voce@email.com" /></label>
-            <label className="block text-sm font-medium text-ink">Senha<input required type="password" minLength={6} className={`${inputClass} mt-2`} placeholder="Mínimo de 6 caracteres" /></label>
-            <Button type="submit" className="w-full" disabled={loading}>{loading ? "Criando…" : "Criar minha conta"}</Button>
+            <label className="block text-sm font-medium text-ink">Nome<input required value={name} onChange={(e) => setName(e.target.value)} className={`${inputClass} mt-2`} placeholder="Seu nome" /></label>
+            <label className="block text-sm font-medium text-ink">E-mail<input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={`${inputClass} mt-2`} placeholder="voce@email.com" /></label>
+            <label className="block text-sm font-medium text-ink">Senha<input required type="password" minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className={`${inputClass} mt-2`} placeholder="Mínimo de 6 caracteres" /></label>
+            <Button type="submit" className="w-full" disabled={!valid || loading}>{loading ? "Criando…" : "Criar minha conta"}</Button>
           </form>
-          <p className="mt-6 text-center text-sm text-muted-foreground">Já tem uma conta? <button type="button" className="font-semibold text-primary" onClick={() => toast("Login em breve", { description: "Por enquanto, crie sua conta gratuita." })}>Entrar</button></p>
+          <p className="mt-6 text-center text-sm text-muted-foreground">Já tem uma conta? <Link to="/login" className="font-semibold text-primary">Entrar</Link></p>
         </Card>
       </section>
     </div>
