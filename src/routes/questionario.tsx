@@ -59,7 +59,7 @@ function Questionnaire() {
                   </div>
                 </Card>
               ))}
-              <Card variant="highlight">
+              <Card>
                 <p className="text-xs font-semibold text-primary">PERGUNTA 5 DE 6</p>
                 <label htmlFor="dificuldade" className="mt-2 block text-lg font-semibold">Conte um pouco mais — você tem alguma dificuldade específica no momento?</label>
                 <textarea id="dificuldade" placeholder="Ex.: tenho dificuldade em falar sobre minhas conquistas em entrevistas..." className="mt-4 min-h-32 w-full rounded-inner bg-muted p-5 text-sm outline-hidden focus:ring-2 focus:ring-primary/30" />

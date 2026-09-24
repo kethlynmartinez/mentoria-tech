@@ -16,7 +16,6 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as QuestionarioRouteImport } from './routes/questionario'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as MentoraIndexRouteImport } from './routes/mentora.index'
-import { Route as MentoraIdRouteImport } from './routes/mentora.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -53,11 +52,6 @@ const MentoraIndexRoute = MentoraIndexRouteImport.update({
   path: '/mentora/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MentoraIdRoute = MentoraIdRouteImport.update({
-  id: '/mentora/$id',
-  path: '/mentora/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,7 +60,6 @@ export interface FileRoutesByFullPath {
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
-  '/mentora/$id': typeof MentoraIdRoute
   '/mentora/': typeof MentoraIndexRoute
 }
 export interface FileRoutesByTo {
@@ -76,7 +69,6 @@ export interface FileRoutesByTo {
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
-  '/mentora/$id': typeof MentoraIdRoute
   '/mentora': typeof MentoraIndexRoute
 }
 export interface FileRoutesById {
@@ -87,7 +79,6 @@ export interface FileRoutesById {
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
-  '/mentora/$id': typeof MentoraIdRoute
   '/mentora/': typeof MentoraIndexRoute
 }
 export interface FileRouteTypes {
@@ -99,7 +90,6 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/questionario'
     | '/sobre'
-    | '/mentora/$id'
     | '/mentora/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -109,7 +99,6 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/questionario'
     | '/sobre'
-    | '/mentora/$id'
     | '/mentora'
   id:
     | '__root__'
@@ -119,7 +108,6 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/questionario'
     | '/sobre'
-    | '/mentora/$id'
     | '/mentora/'
   fileRoutesById: FileRoutesById
 }
@@ -130,7 +118,6 @@ export interface RootRouteChildren {
   PerfilRoute: typeof PerfilRoute
   QuestionarioRoute: typeof QuestionarioRoute
   SobreRoute: typeof SobreRoute
-  MentoraIdRoute: typeof MentoraIdRoute
   MentoraIndexRoute: typeof MentoraIndexRoute
 }
 
@@ -185,13 +172,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MentoraIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mentora/$id': {
-      id: '/mentora/$id'
-      path: '/mentora/$id'
-      fullPath: '/mentora/$id'
-      preLoaderRoute: typeof MentoraIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -202,7 +182,6 @@ const rootRouteChildren: RootRouteChildren = {
   PerfilRoute: PerfilRoute,
   QuestionarioRoute: QuestionarioRoute,
   SobreRoute: SobreRoute,
-  MentoraIdRoute: MentoraIdRoute,
   MentoraIndexRoute: MentoraIndexRoute,
 }
 export const routeTree = rootRouteImport
