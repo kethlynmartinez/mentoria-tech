@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { PackageDialog, ScheduleDialog, TipsDialog } from "./actions";
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
 import { Message, MessageContent } from "@/components/ai-elements/message";
-import { PromptInput, PromptInputButton, PromptInputFooter, PromptInputHeader, PromptInputSubmit, PromptInputTextarea, usePromptInputAttachments, type PromptInputMessage } from "@/components/ai-elements/prompt-input";
+import { PromptInput, PromptInputButton, PromptInputHeader, PromptInputSubmit, PromptInputTextarea, usePromptInputAttachments, type PromptInputMessage } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 
 const links = [
@@ -33,12 +33,12 @@ const interviewFeedback = "Simulação concluída! Pontos fortes: clareza ao con
 function PendingAttachments() {
   const attachments = usePromptInputAttachments();
   if (attachments.files.length === 0) return null;
-  return <PromptInputHeader>{attachments.files.map((file) => <div key={file.id} className="flex w-full items-center justify-between gap-2 rounded-full bg-lilac-soft px-4 py-2 text-xs text-primary"><span className="flex min-w-0 items-center gap-2"><FileText className="size-4 shrink-0" /><span className="truncate">{file.filename ?? "Arquivo"} anexado</span></span><Button type="button" variant="ghost" size="icon-sm" onClick={() => attachments.remove(file.id)} aria-label="Remover anexo"><X className="size-3.5" /></Button></div>)}</PromptInputHeader>;
+  return <PromptInputHeader className="order-first w-full basis-full">{attachments.files.map((file) => <div key={file.id} className="flex w-full items-center justify-between gap-2 rounded-full bg-lilac-soft px-4 py-2 text-xs text-primary"><span className="flex min-w-0 items-center gap-2"><FileText className="size-4 shrink-0" /><span className="truncate">{file.filename ?? "Arquivo"} anexado</span></span><Button type="button" variant="ghost" size="icon-sm" onClick={() => attachments.remove(file.id)} aria-label="Remover anexo"><X className="size-3.5" /></Button></div>)}</PromptInputHeader>;
 }
 
 function AttachmentButton() {
   const attachments = usePromptInputAttachments();
-  return <PromptInputButton type="button" variant="outline" size="icon-sm" aria-label="Anexar arquivo" onClick={attachments.openFileDialog}><Paperclip /></PromptInputButton>;
+  return <PromptInputButton type="button" className="order-first shrink-0 rounded-full" variant="outline" size="icon-sm" aria-label="Anexar arquivo" onClick={attachments.openFileDialog}><Paperclip /></PromptInputButton>;
 }
 
 function CareerChat() {
@@ -169,9 +169,9 @@ function CareerChat() {
           <ConversationScrollButton />
         </Conversation>
         <div className="shrink-0 border-t border-border p-3">
-          <PromptInput className="[&_[data-slot=input-group]]:h-auto [&_[data-slot=input-group]]:flex-wrap [&_[data-slot=input-group]]:items-center [&_[data-slot=input-group]]:rounded-card [&_[data-slot=input-group]]:border-0 [&_[data-slot=input-group]]:bg-muted [&_[data-slot=input-group]]:p-1.5 [&_[data-slot=input-group]]:shadow-none" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/*" maxFiles={1} maxFileSize={20 * 1024 * 1024} onSubmit={submitMessage} onError={() => undefined}>
+          <PromptInput className="[&_[data-slot=input-group]]:h-auto [&_[data-slot=input-group]]:!flex-row [&_[data-slot=input-group]]:flex-wrap [&_[data-slot=input-group]]:gap-1 [&_[data-slot=input-group]]:items-center [&_[data-slot=input-group]]:rounded-card [&_[data-slot=input-group]]:border-0 [&_[data-slot=input-group]]:bg-muted [&_[data-slot=input-group]]:p-1.5 [&_[data-slot=input-group]]:shadow-none" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/*" maxFiles={1} maxFileSize={20 * 1024 * 1024} onSubmit={submitMessage} onError={() => undefined}>
             <PendingAttachments />
-            <PromptInputFooter className="order-first w-auto shrink-0 p-0"><AttachmentButton /></PromptInputFooter>
+            <AttachmentButton />
             <PromptInputTextarea aria-label="Mensagem" placeholder="Digite sua pergunta" className="order-none h-9 min-h-9 w-auto min-w-0 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-5" />
             <PromptInputSubmit aria-label="Enviar mensagem ou arquivo" size="icon-sm" className="order-last shrink-0 rounded-full" disabled={typing} status={typing ? "streaming" : "ready"}><Send /></PromptInputSubmit>
           </PromptInput>
