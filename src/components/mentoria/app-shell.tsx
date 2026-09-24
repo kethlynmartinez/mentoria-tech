@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { PackageDialog, ScheduleDialog, TipsDialog } from "./actions";
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
 import { Message, MessageContent } from "@/components/ai-elements/message";
-import { PromptInput, PromptInputButton, PromptInputFooter, PromptInputHeader, PromptInputSubmit, PromptInputTextarea, usePromptInputAttachments, type PromptInputMessage } from "@/components/ai-elements/prompt-input";
+import { PromptInput, PromptInputButton, PromptInputHeader, PromptInputSubmit, PromptInputTextarea, usePromptInputAttachments, type PromptInputMessage } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 
 const links = [
@@ -33,12 +33,12 @@ const interviewFeedback = "Simulação concluída! Pontos fortes: clareza ao con
 function PendingAttachments() {
   const attachments = usePromptInputAttachments();
   if (attachments.files.length === 0) return null;
-  return <PromptInputHeader>{attachments.files.map((file) => <div key={file.id} className="flex w-full items-center justify-between gap-2 rounded-full bg-lilac-soft px-4 py-2 text-xs text-primary"><span className="flex min-w-0 items-center gap-2"><FileText className="size-4 shrink-0" /><span className="truncate">{file.filename ?? "Arquivo"} anexado</span></span><Button type="button" variant="ghost" size="icon-sm" onClick={() => attachments.remove(file.id)} aria-label="Remover anexo"><X className="size-3.5" /></Button></div>)}</PromptInputHeader>;
+  return <PromptInputHeader className="order-first w-full basis-full">{attachments.files.map((file) => <div key={file.id} className="flex w-full items-center justify-between gap-2 rounded-full bg-lilac-soft px-4 py-2 text-xs text-primary"><span className="flex min-w-0 items-center gap-2"><FileText className="size-4 shrink-0" /><span className="truncate">{file.filename ?? "Arquivo"} anexado</span></span><Button type="button" variant="ghost" size="icon-sm" onClick={() => attachments.remove(file.id)} aria-label="Remover anexo"><X className="size-3.5" /></Button></div>)}</PromptInputHeader>;
 }
 
 function AttachmentButton() {
   const attachments = usePromptInputAttachments();
-  return <PromptInputButton type="button" variant="outline" size="icon-sm" aria-label="Anexar arquivo" onClick={attachments.openFileDialog}><Paperclip /></PromptInputButton>;
+  return <PromptInputButton type="button" className="order-first shrink-0 rounded-full" variant="outline" size="icon-sm" aria-label="Anexar arquivo" onClick={attachments.openFileDialog}><Paperclip /></PromptInputButton>;
 }
 
 function CareerChat() {
@@ -151,14 +151,15 @@ function CareerChat() {
 
   return (
     <div className="fixed bottom-5 right-4 z-40 sm:bottom-6 sm:right-6">
-      {open && <div className="mb-3 flex h-[min(70vh,620px)] w-[calc(100vw-2rem)] max-w-[380px] flex-col overflow-hidden rounded-card border border-card-border bg-card shadow-float">
-        <div className="bg-hero-gradient p-5 text-primary-foreground">
-          <div className="flex items-start justify-between"><div><p className="font-semibold">Assistente de carreira</p><span className="mt-1 inline-block rounded-full bg-card/15 px-2 py-1 text-[10px]">Gratuita para todas as usuárias</span></div><Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Fechar chat" className="text-primary-foreground hover:bg-card/15"><X /></Button></div>
+      {open && <div className="mb-3 flex h-[min(70vh,620px)] max-h-[calc(100vh-7rem)] w-[calc(100vw-2rem)] max-w-[380px] flex-col overflow-hidden rounded-card border border-card-border bg-card shadow-float">
+        <div className="flex shrink-0 items-center justify-between gap-3 bg-hero-gradient px-5 py-4 text-primary-foreground">
+          <div className="min-w-0"><p className="font-semibold leading-tight">Assistente de carreira</p><span className="mt-1.5 inline-block rounded-full bg-card/15 px-2.5 py-1 text-[10px] font-medium">Gratuita para todas as usuárias</span></div>
+          <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Fechar chat" className="shrink-0 text-primary-foreground hover:bg-card/15"><X /></Button>
         </div>
-        <Conversation className="min-h-0">
-          <ConversationContent className="gap-3 p-4">
+        <Conversation className="min-h-0 flex-1">
+          <ConversationContent className="gap-4 p-4">
             <Message from="assistant"><MessageContent className="leading-6">Olá! Como posso ajudar sua carreira hoje? Posso analisar seu currículo, simular entrevistas e encontrar sua mentora.</MessageContent></Message>
-            <div className="flex flex-wrap gap-2">{suggestions.map((suggestion) => <Button key={suggestion} variant="outline" size="sm" onClick={() => chooseSuggestion(suggestion)}>{suggestion}</Button>)}</div>
+            <div className="flex max-w-full flex-wrap gap-2">{suggestions.map((suggestion) => <Button key={suggestion} variant="outline" size="sm" className="max-w-full" onClick={() => chooseSuggestion(suggestion)}>{suggestion}</Button>)}</div>
             {messages.map((message, index) => <Message key={`${message.text}-${index}`} from={message.from === "ai" ? "assistant" : "user"}>
               <MessageContent className={cn("leading-6", message.from === "user" && "rounded-inner bg-primary text-primary-foreground")}>{message.file && <span className="mb-1 flex items-center gap-2 font-semibold"><FileText className="size-4" />{message.file}</span>}{message.text}</MessageContent>
               {message.actions && <div className="flex flex-wrap gap-2">{message.actions.map((action, actionIndex) => renderAction(action, `${index}-${actionIndex}`, index < lastAi && action.kind === "next"))}</div>}
@@ -167,11 +168,12 @@ function CareerChat() {
           </ConversationContent>
           <ConversationScrollButton />
         </Conversation>
-        <div className="border-t border-border p-3">
-          <PromptInput accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/*" maxFiles={1} maxFileSize={20 * 1024 * 1024} onSubmit={submitMessage} onError={() => undefined}>
+        <div className="shrink-0 border-t border-border p-3">
+          <PromptInput className="[&_[data-slot=input-group]]:h-auto [&_[data-slot=input-group]]:!flex-row [&_[data-slot=input-group]]:flex-wrap [&_[data-slot=input-group]]:gap-1 [&_[data-slot=input-group]]:items-center [&_[data-slot=input-group]]:rounded-card [&_[data-slot=input-group]]:border-0 [&_[data-slot=input-group]]:bg-muted [&_[data-slot=input-group]]:p-1.5 [&_[data-slot=input-group]]:shadow-none" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/*" maxFiles={1} maxFileSize={20 * 1024 * 1024} onSubmit={submitMessage} onError={() => undefined}>
             <PendingAttachments />
-            <PromptInputTextarea aria-label="Mensagem" placeholder="Digite sua pergunta" className="min-h-10 rounded-full bg-muted px-4 py-2 text-sm" />
-            <PromptInputFooter><AttachmentButton /><PromptInputSubmit aria-label="Enviar mensagem ou arquivo" disabled={typing} status={typing ? "streaming" : "ready"}><Send /></PromptInputSubmit></PromptInputFooter>
+            <AttachmentButton />
+            <PromptInputTextarea aria-label="Mensagem" placeholder="Digite sua pergunta" className="order-none h-9 min-h-9 w-auto min-w-0 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-5" />
+            <PromptInputSubmit aria-label="Enviar mensagem ou arquivo" size="icon-sm" className="order-last shrink-0 rounded-full" disabled={typing} status={typing ? "streaming" : "ready"}><Send /></PromptInputSubmit>
           </PromptInput>
           <p className="mt-2 text-center text-[10px] text-muted-foreground">Recurso gratuito, mesmo sem mentoria contratada.</p>
         </div>
@@ -184,5 +186,5 @@ function CareerChat() {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = useRouterState({ select: (state) => state.location.pathname });
   const navigation = links.map((link) => <Link key={link.to} to={link.to} className={cn("shrink-0 rounded-full px-3 py-2 text-sm font-medium", path === link.to ? "bg-lilac-soft text-primary" : "text-muted-foreground hover:text-primary")}>{link.label}</Link>);
-  return <><header className="sticky top-0 z-30 border-b border-card-border bg-background/90 backdrop-blur-xl"><div className="mx-auto max-w-[1200px] px-5"><div className="flex h-20 items-center justify-between"><Link to="/"><Brand /></Link><nav className="hidden items-center gap-3 lg:flex">{navigation}</nav><Button asChild className="hidden sm:inline-flex"><Link to="/assinatura">Começar grátis</Link></Button></div><nav className="flex w-full items-center gap-1 overflow-x-auto pb-3 lg:hidden">{navigation}</nav></div></header><main>{children}</main><CareerChat /><Toaster position="top-center" /></>;
+  return <><header className="sticky top-0 z-30 border-b border-card-border bg-background/90 backdrop-blur-xl"><div className="mx-auto max-w-[1200px] px-5"><div className="flex h-20 items-center justify-between"><Link to="/"><Brand /></Link><nav className="hidden items-center gap-3 lg:flex">{navigation}</nav><Button asChild className="hidden sm:inline-flex"><Link to="/cadastro">Começar grátis</Link></Button></div><nav className="flex w-full items-center gap-1 overflow-x-auto pb-3 lg:hidden">{navigation}</nav></div></header><main>{children}</main><CareerChat /><Toaster position="top-center" /></>;
 }

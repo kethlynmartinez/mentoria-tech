@@ -9,10 +9,10 @@
 - [x] Remover Serviços do perfil de Mariana e adicionar contato com Consulte valores
 - [x] Corrigir o fluxo de seleção, envio e análise de currículo e portfólio no chat
 - [x] Validar rotas, fluxos do chat e responsividade sem regressões
-- [ ] Corrigir alinhamento e espaçamento do chat da IA
-- [ ] Revisar contraste e variedade dos cards em todas as páginas
-- [ ] Trocar Marina por Raquel em todo o produto
-- [ ] Usar as fotos enviadas na videochamada da Home
-- [ ] Criar e conectar a página /cadastro
-- [ ] Atualizar preços das mentorias avulsas e promoção de Entrevista
-- [ ] Validar rotas, chat, cadastro e responsividade após os ajustes
+- [x] Corrigir alinhamento e espaçamento do chat da IA
+- [x] Revisar contraste e variedade dos cards em todas as páginas
+- [x] Trocar Marina por Raquel em todo o produto
+- [x] Usar as fotos enviadas na videochamada da Home
+- [x] Criar e conectar a página /cadastro
+- [x] Atualizar preços das mentorias avulsas e promoção de Entrevista
+- [x] Validar rotas, chat, cadastro e responsividade após os ajustes
