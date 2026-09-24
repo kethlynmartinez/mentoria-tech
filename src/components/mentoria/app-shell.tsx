@@ -151,14 +151,15 @@ function CareerChat() {
 
   return (
     <div className="fixed bottom-5 right-4 z-40 sm:bottom-6 sm:right-6">
-      {open && <div className="mb-3 flex h-[min(70vh,620px)] w-[calc(100vw-2rem)] max-w-[380px] flex-col overflow-hidden rounded-card border border-card-border bg-card shadow-float">
-        <div className="bg-hero-gradient p-5 text-primary-foreground">
-          <div className="flex items-start justify-between"><div><p className="font-semibold">Assistente de carreira</p><span className="mt-1 inline-block rounded-full bg-card/15 px-2 py-1 text-[10px]">Gratuita para todas as usuárias</span></div><Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Fechar chat" className="text-primary-foreground hover:bg-card/15"><X /></Button></div>
+      {open && <div className="mb-3 flex h-[min(70vh,620px)] max-h-[calc(100vh-7rem)] w-[calc(100vw-2rem)] max-w-[380px] flex-col overflow-hidden rounded-card border border-card-border bg-card shadow-float">
+        <div className="flex shrink-0 items-center justify-between gap-3 bg-hero-gradient px-5 py-4 text-primary-foreground">
+          <div className="min-w-0"><p className="font-semibold leading-tight">Assistente de carreira</p><span className="mt-1.5 inline-block rounded-full bg-card/15 px-2.5 py-1 text-[10px] font-medium">Gratuita para todas as usuárias</span></div>
+          <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Fechar chat" className="shrink-0 text-primary-foreground hover:bg-card/15"><X /></Button>
         </div>
-        <Conversation className="min-h-0">
-          <ConversationContent className="gap-3 p-4">
+        <Conversation className="min-h-0 flex-1">
+          <ConversationContent className="gap-4 p-4">
             <Message from="assistant"><MessageContent className="leading-6">Olá! Como posso ajudar sua carreira hoje? Posso analisar seu currículo, simular entrevistas e encontrar sua mentora.</MessageContent></Message>
-            <div className="flex flex-wrap gap-2">{suggestions.map((suggestion) => <Button key={suggestion} variant="outline" size="sm" onClick={() => chooseSuggestion(suggestion)}>{suggestion}</Button>)}</div>
+            <div className="flex max-w-full flex-wrap gap-2">{suggestions.map((suggestion) => <Button key={suggestion} variant="outline" size="sm" className="max-w-full" onClick={() => chooseSuggestion(suggestion)}>{suggestion}</Button>)}</div>
             {messages.map((message, index) => <Message key={`${message.text}-${index}`} from={message.from === "ai" ? "assistant" : "user"}>
               <MessageContent className={cn("leading-6", message.from === "user" && "rounded-inner bg-primary text-primary-foreground")}>{message.file && <span className="mb-1 flex items-center gap-2 font-semibold"><FileText className="size-4" />{message.file}</span>}{message.text}</MessageContent>
               {message.actions && <div className="flex flex-wrap gap-2">{message.actions.map((action, actionIndex) => renderAction(action, `${index}-${actionIndex}`, index < lastAi && action.kind === "next"))}</div>}
@@ -167,11 +168,12 @@ function CareerChat() {
           </ConversationContent>
           <ConversationScrollButton />
         </Conversation>
-        <div className="border-t border-border p-3">
-          <PromptInput accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/*" maxFiles={1} maxFileSize={20 * 1024 * 1024} onSubmit={submitMessage} onError={() => undefined}>
+        <div className="shrink-0 border-t border-border p-3">
+          <PromptInput className="[&_[data-slot=input-group]]:h-auto [&_[data-slot=input-group]]:flex-wrap [&_[data-slot=input-group]]:items-center [&_[data-slot=input-group]]:rounded-card [&_[data-slot=input-group]]:border-0 [&_[data-slot=input-group]]:bg-muted [&_[data-slot=input-group]]:p-1.5 [&_[data-slot=input-group]]:shadow-none" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,image/*" maxFiles={1} maxFileSize={20 * 1024 * 1024} onSubmit={submitMessage} onError={() => undefined}>
             <PendingAttachments />
-            <PromptInputTextarea aria-label="Mensagem" placeholder="Digite sua pergunta" className="min-h-10 rounded-full bg-muted px-4 py-2 text-sm" />
-            <PromptInputFooter><AttachmentButton /><PromptInputSubmit aria-label="Enviar mensagem ou arquivo" disabled={typing} status={typing ? "streaming" : "ready"}><Send /></PromptInputSubmit></PromptInputFooter>
+            <PromptInputFooter className="order-first w-auto shrink-0 p-0"><AttachmentButton /></PromptInputFooter>
+            <PromptInputTextarea aria-label="Mensagem" placeholder="Digite sua pergunta" className="order-none h-9 min-h-9 w-auto min-w-0 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-5" />
+            <PromptInputSubmit aria-label="Enviar mensagem ou arquivo" size="icon-sm" className="order-last shrink-0 rounded-full" disabled={typing} status={typing ? "streaming" : "ready"}><Send /></PromptInputSubmit>
           </PromptInput>
           <p className="mt-2 text-center text-[10px] text-muted-foreground">Recurso gratuito, mesmo sem mentoria contratada.</p>
         </div>
