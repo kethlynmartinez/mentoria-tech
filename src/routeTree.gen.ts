@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AssinaturaRouteImport } from './routes/assinatura'
+import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as QuestionarioRouteImport } from './routes/questionario'
 import { Route as SobreRouteImport } from './routes/sobre'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const AssinaturaRoute = AssinaturaRouteImport.update({
   id: '/assinatura',
   path: '/assinatura',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -56,6 +62,7 @@ const MentoraIdRoute = MentoraIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
+  '/cadastro': typeof CadastroRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
+  '/cadastro': typeof CadastroRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
+  '/cadastro': typeof CadastroRoute
   '/perfil': typeof PerfilRoute
   '/questionario': typeof QuestionarioRoute
   '/sobre': typeof SobreRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/assinatura'
+    | '/cadastro'
     | '/perfil'
     | '/questionario'
     | '/sobre'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/assinatura'
+    | '/cadastro'
     | '/perfil'
     | '/questionario'
     | '/sobre'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/assinatura'
+    | '/cadastro'
     | '/perfil'
     | '/questionario'
     | '/sobre'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssinaturaRoute: typeof AssinaturaRoute
+  CadastroRoute: typeof CadastroRoute
   PerfilRoute: typeof PerfilRoute
   QuestionarioRoute: typeof QuestionarioRoute
   SobreRoute: typeof SobreRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/assinatura'
       fullPath: '/assinatura'
       preLoaderRoute: typeof AssinaturaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -178,6 +198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssinaturaRoute: AssinaturaRoute,
+  CadastroRoute: CadastroRoute,
   PerfilRoute: PerfilRoute,
   QuestionarioRoute: QuestionarioRoute,
   SobreRoute: SobreRoute,
