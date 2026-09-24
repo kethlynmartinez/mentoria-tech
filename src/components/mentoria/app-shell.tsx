@@ -66,20 +66,20 @@ function CareerChat() {
   const requestFile = (kind: AnalysisKind) => {
     setAnalysisKind(kind);
     setMessages((current) => [...current, { from: "user", text: kind === "curriculo" ? "Analisar currículo" : "Analisar portfólio" }]);
-    aiSay(kind === "curriculo" ? `${careerMentors.curriculo} fará sua análise. Envie seu currículo.` : `${careerMentors.portfolio} fará sua análise. Envie seu portfólio.`);
+    aiSay(kind === "curriculo" ? "Envie seu currículo para eu iniciar a análise." : "Envie seu portfólio para eu iniciar a análise.");
   };
 
   const analyzeFile = (name: string, kind: AnalysisKind) => {
     const label = kind === "curriculo" ? "currículo" : "portfólio";
     const confirmation = kind === "curriculo"
-      ? `${careerMentors.curriculo} recebeu seu currículo e vai analisar a estrutura, o conteúdo e a apresentação.`
-      : `${careerMentors.portfolio} recebeu seu portfólio e vai analisar os projetos, a narrativa e a apresentação.`;
+      ? "Recebi seu currículo e vou analisar a estrutura, o conteúdo e a apresentação."
+      : "Recebi seu portfólio e vou analisar os projetos, a narrativa e a apresentação.";
     const feedback = kind === "curriculo"
-      ? `Feedback de ${careerMentors.curriculo}: sua experiência técnica está bem descrita. Adicione resultados quantificados, como “reduzi o tempo de carregamento em 30%”, e destaque projetos de liderança.`
-      : `Feedback de ${careerMentors.portfolio}: seu portfólio tem bons projetos. Adicione um estudo de caso detalhado explicando o problema, suas decisões e o processo, não apenas o resultado final.`;
+      ? "Sua experiência técnica está bem descrita. Adicione resultados quantificados, como “reduzi o tempo de carregamento em 30%”, e destaque projetos de liderança."
+      : "Seu portfólio tem bons projetos. Adicione um estudo de caso detalhado explicando o problema, suas decisões e o processo, não apenas o resultado final.";
     const actions: ChatAction[] = kind === "curriculo"
-      ? [{ label: "Ver dicas completas", kind: "tips" }, { label: "Agendar mentoria de currículo", kind: "schedule", topic: "Mentoria de currículo", mentor: careerMentors.curriculo }]
-      : [{ label: "Ver pacote de Portfólio", kind: "package" }];
+      ? [{ label: "Ver dicas completas", kind: "tips" }, { label: `Agendar mentoria com ${careerMentors.curriculo}`, kind: "schedule", topic: "Mentoria de currículo", mentor: careerMentors.curriculo }]
+      : [{ label: `Ver mentoria com ${careerMentors.portfolio}`, kind: "package" }];
 
     setMessages((current) => [...current, { from: "user", text: `${name} enviado`, file: name }]);
     setAnalysisKind(null);
@@ -98,8 +98,8 @@ function CareerChat() {
     setUsedNext(true);
     stepRef.current += 1;
     const next = interviewQuestions[stepRef.current];
-    if (next) aiSay(`${careerMentors.entrevista}: ${next}`, [{ label: "Próxima pergunta", kind: "next" }]);
-    else aiSay(`${careerMentors.entrevista}: ${interviewFeedback}`, [{ label: "Agendar simulação completa", kind: "schedule", topic: "Simulação de entrevista", mentor: careerMentors.entrevista }]);
+    if (next) aiSay(next, [{ label: "Próxima pergunta", kind: "next" }]);
+    else aiSay(interviewFeedback, [{ label: `Agendar simulação com ${careerMentors.entrevista}`, kind: "schedule", topic: "Simulação de entrevista", mentor: careerMentors.entrevista }]);
   };
 
   const sendText = (value: string) => {
@@ -118,7 +118,7 @@ function CareerChat() {
     if (normalized.includes("entrevista")) {
       stepRef.current = 0;
       setUsedNext(false);
-      aiSay(`${careerMentors.entrevista}: ${interviewQuestions[0] ?? "Conte sobre um desafio técnico que você resolveu recentemente."}`, [{ label: "Próxima pergunta", kind: "next" }]);
+      aiSay(interviewQuestions[0] ?? "Conte sobre um desafio técnico que você resolveu recentemente.", [{ label: "Próxima pergunta", kind: "next" }]);
     } else if (normalized.includes("liderança") || normalized.includes("lideranca")) {
       aiSay("Vamos mapear comunicação, influência e gestão de conflitos para seu próximo passo.", [{ label: "Agendar mentoria de liderança", kind: "schedule", topic: "Preparação para liderança" }]);
     } else {

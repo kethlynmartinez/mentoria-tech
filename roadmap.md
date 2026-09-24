@@ -18,3 +18,4 @@
 - [x] Validar rotas, chat, cadastro e responsividade após os ajustes
 - [x] Reorganizar os cards da mentora e corrigir o contraste dos textos solicitados
 - [x] Simplificar as mentoras sugeridas e atribuir especialistas distintas aos fluxos da IA
+- [x] Manter a IA como única voz do chat e exibir especialistas apenas nas opções finais
